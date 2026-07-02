@@ -1,0 +1,4600 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Daily Lexical Biscuit</title>
+  <style>
+    :root {
+      --bg0: #140f1f;
+      --bg1: #24123a;
+      --bg2: #3b1b4f;
+      --panel: rgba(255, 255, 255, 0.105);
+      --panel-strong: rgba(255, 255, 255, 0.16);
+      --text: #fff8ef;
+      --muted: rgba(255, 248, 239, 0.72);
+      --soft: rgba(255, 248, 239, 0.14);
+      --line: rgba(255, 255, 255, 0.18);
+      --accent: #ffc76a;
+      --accent2: #ff7ac8;
+      --accent3: #8af7ff;
+      --ok: #b9ff9b;
+      --shadow: rgba(0, 0, 0, 0.36);
+      --danger: #ff8b8b;
+      color-scheme: dark;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      min-height: 100%;
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 8%, rgba(255, 199, 106, 0.23), transparent 30rem),
+        radial-gradient(circle at 90% 12%, rgba(138, 247, 255, 0.18), transparent 28rem),
+        radial-gradient(circle at 48% 94%, rgba(255, 122, 200, 0.22), transparent 30rem),
+        linear-gradient(135deg, var(--bg0), var(--bg1) 45%, var(--bg2));
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      z-index: -1;
+      width: 38vmax;
+      height: 38vmax;
+      border-radius: 999px;
+      filter: blur(52px);
+      opacity: 0.42;
+      animation: drift 18s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    body::before {
+      left: -12vmax;
+      top: 18vh;
+      background: rgba(255, 122, 200, 0.22);
+    }
+
+    body::after {
+      right: -12vmax;
+      bottom: 4vh;
+      background: rgba(138, 247, 255, 0.18);
+      animation-duration: 22s;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(5vw, -3vh, 0) scale(1.12); }
+    }
+
+    .shell {
+      width: min(1180px, calc(100vw - 28px));
+      margin: 0 auto;
+      padding: 26px 0 32px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      max-width: 730px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--accent);
+      background: rgba(255, 255, 255, 0.08);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 800;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.16);
+      backdrop-filter: blur(18px);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent2);
+      box-shadow: 0 0 18px var(--accent2);
+    }
+
+    h1 {
+      margin: 14px 0 8px;
+      font-size: clamp(34px, 7vw, 76px);
+      line-height: 0.92;
+      letter-spacing: -0.07em;
+      text-wrap: balance;
+    }
+
+    .intro {
+      max-width: 740px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(15px, 1.8vw, 18px);
+      line-height: 1.5;
+    }
+
+    .date-pill {
+      flex: 0 0 auto;
+      min-width: 210px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(150deg, rgba(255,255,255,0.17), rgba(255,255,255,0.065));
+      box-shadow: 0 22px 60px var(--shadow);
+      backdrop-filter: blur(20px);
+      text-align: right;
+    }
+
+    .date-pill .small {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 800;
+    }
+
+    .date-pill .date {
+      margin-top: 8px;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 350px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card,
+    .side-card,
+    .archive {
+      border: 1px solid var(--line);
+      background: linear-gradient(150deg, rgba(255,255,255,0.18), rgba(255,255,255,0.075));
+      border-radius: 34px;
+      box-shadow: 0 28px 90px var(--shadow);
+      backdrop-filter: blur(24px);
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      min-height: 540px;
+      padding: clamp(22px, 4vw, 42px);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 84% 12%, rgba(255,199,106,0.36), transparent 22rem),
+        radial-gradient(circle at 4% 92%, rgba(138,247,255,0.22), transparent 24rem);
+    }
+
+    .topline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(0,0,0,0.14);
+      color: rgba(255, 248, 239, 0.86);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .tag.pos {
+      color: var(--accent3);
+    }
+
+    .tag.register {
+      color: var(--accent);
+    }
+
+    .word {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(58px, 11vw, 132px);
+      line-height: 0.86;
+      letter-spacing: -0.075em;
+      text-transform: lowercase;
+      overflow-wrap: anywhere;
+      text-shadow: 0 18px 50px rgba(0,0,0,0.26);
+    }
+
+    .meaning {
+      max-width: 760px;
+      margin: 26px 0 0;
+      font-size: clamp(22px, 3.2vw, 34px);
+      line-height: 1.14;
+      letter-spacing: -0.035em;
+      font-weight: 850;
+    }
+
+    .meaning span {
+      color: var(--accent);
+    }
+
+    .example-wrap {
+      position: relative;
+      margin: 30px 0 0;
+      padding: 26px;
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 28px;
+      background: rgba(0,0,0,0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .example-label {
+      margin: 0 0 10px;
+      color: var(--accent2);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .example {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(22px, 3.1vw, 36px);
+      line-height: 1.22;
+      letter-spacing: -0.03em;
+    }
+
+    .example mark {
+      color: var(--bg0);
+      background: linear-gradient(90deg, var(--accent), #fff0b8);
+      border-radius: 0.22em;
+      padding: 0 0.12em;
+    }
+
+    .note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    button,
+    .fake-button {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      color: var(--text);
+      min-height: 44px;
+      padding: 11px 15px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 850;
+      cursor: pointer;
+      transition: transform 150ms ease, background 150ms ease, border-color 150ms ease, opacity 150ms ease;
+      user-select: none;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.18);
+      border-color: rgba(255,255,255,0.36);
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .primary {
+      color: #251122;
+      background: linear-gradient(135deg, var(--accent), #fff0a8);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    .secondary {
+      color: var(--bg0);
+      background: linear-gradient(135deg, var(--accent3), #e5fffb);
+    }
+
+    .starred {
+      color: #241124;
+      background: linear-gradient(135deg, var(--accent2), #ffc5ed);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 20;
+      transform: translate(-50%, 20px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(20, 15, 31, 0.86);
+      color: var(--text);
+      box-shadow: 0 18px 48px rgba(0,0,0,0.3);
+      backdrop-filter: blur(18px);
+      transition: opacity 180ms ease, transform 180ms ease;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    aside {
+      display: grid;
+      gap: 18px;
+    }
+
+    .side-card {
+      padding: 20px;
+    }
+
+    .side-title {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .stat {
+      min-height: 86px;
+      padding: 14px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.14);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.25;
+      font-weight: 750;
+    }
+
+    .category {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(0,0,0,0.14);
+      border: 1px solid var(--line);
+      color: rgba(255,248,239,0.86);
+      line-height: 1.42;
+      font-size: 14px;
+    }
+
+    details.archive {
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 18px 20px;
+      font-weight: 900;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "open";
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    details[open] summary::after {
+      content: "close";
+    }
+
+    .archive-inner {
+      padding: 0 20px 20px;
+    }
+
+    .search {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      outline: none;
+      background: rgba(0,0,0,0.2);
+      color: var(--text);
+      font: inherit;
+      padding: 0 14px;
+    }
+
+    .search::placeholder {
+      color: rgba(255,248,239,0.52);
+    }
+
+    .list {
+      max-height: 410px;
+      overflow: auto;
+      margin-top: 12px;
+      padding-right: 4px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      background: rgba(0,0,0,0.12);
+      padding: 11px;
+      cursor: pointer;
+    }
+
+    .item:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .item .num {
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 12px;
+      min-width: 28px;
+    }
+
+    .item strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.15;
+    }
+
+    .item span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: rgba(255,248,239,0.55);
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      header {
+        display: block;
+      }
+
+      .date-pill {
+        margin-top: 16px;
+        text-align: left;
+        min-width: 0;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        width: min(100vw - 18px, 1180px);
+        padding-top: 14px;
+      }
+
+      .card,
+      .side-card,
+      .archive,
+      .date-pill {
+        border-radius: 24px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .example-wrap {
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .actions button {
+        flex: 1 1 calc(50% - 10px);
+      }
+
+      .actions button.primary {
+        flex-basis: 100%;
+      }
+
+      .mini-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <section class="brand" aria-label="App title">
+        <div class="kicker"><span class="dot"></span> word of the day</div>
+        <h1>The Daily Lexical Biscuit</h1>
+        <p class="intro">
+          One curious English word each day, with part of speech, meaning, register, and a deliberately odd little sentence so it sticks.
+        </p>
+      </section>
+
+      <section class="date-pill" aria-label="Current date">
+        <div class="small">today is</div>
+        <div class="date" id="dateText">Loading date…</div>
+      </section>
+    </header>
+
+    <section class="grid">
+      <article class="card" aria-live="polite">
+        <div class="topline">
+          <span class="tag pos" id="posTag">part of speech</span>
+          <span class="tag register" id="registerTag">register</span>
+          <span class="tag" id="modeTag">today</span>
+        </div>
+
+        <h2 class="word" id="wordText">word</h2>
+
+        <p class="meaning">
+          <span>Meaning:</span> <strong id="meaningText">meaning</strong>
+        </p>
+
+        <div class="example-wrap">
+          <p class="example-label">in the wild</p>
+          <p class="example" id="exampleText">Example sentence.</p>
+        </div>
+
+        <p class="note" id="noteText">Usage note.</p>
+
+        <div class="actions">
+          <button class="primary" id="todayBtn">Today’s word</button>
+          <button id="prevBtn">Previous</button>
+          <button id="nextBtn">Next</button>
+          <button class="secondary" id="randomBtn">Random biscuit</button>
+          <button id="copyBtn">Copy card</button>
+          <button id="favBtn">Save favourite</button>
+        </div>
+      </article>
+
+      <aside aria-label="Word details and archive">
+        <section class="side-card">
+          <p class="side-title">daily mechanics</p>
+          <div class="mini-grid">
+            <div class="stat">
+              <strong id="archiveNumber">365</strong>
+              <span>words and phrases in the archive</span>
+            </div>
+            <div class="stat">
+              <strong id="categoryNumber">—</strong>
+              <span>themed shelves in the archive</span>
+            </div>
+            <div class="stat">
+              <strong id="cycleNumber">—</strong>
+              <span>daily slot in the yearly cycle</span>
+            </div>
+            <div class="stat">
+              <strong id="favCount">0</strong>
+              <span>saved favourites on this browser</span>
+            </div>
+            <div class="stat">
+              <strong id="wordNumber">—</strong>
+              <span>archive number for this word</span>
+            </div>
+          </div>
+          <div class="category" id="categoryText">Category information appears here.</div>
+        </section>
+
+        <details class="archive">
+          <summary>Browse the whole archive</summary>
+          <div class="archive-inner">
+            <input class="search" id="searchInput" type="search" autocomplete="off" placeholder="Search word, meaning, category, or part of speech…" />
+            <div class="list" id="archiveList" role="listbox" aria-label="Word archive"></div>
+          </div>
+        </details>
+      </aside>
+    </section>
+
+    <p class="footer-note">
+      The daily word is chosen from the embedded 365-word archive using your browser’s local date. No server, login, database, or internet connection is required.
+    </p>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Copied.</div>
+
+  <script id="wordData" type="application/json">
+[
+  {
+    "id": 1,
+    "word": "chinwag",
+    "pos": "noun / verb",
+    "meaning": "friendly chat",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "This can shift between thing and action; the example uses it as a countable social act.",
+    "example": "After class, two umbrellas had a chinwag about the weather, the monarchy, and one suspiciously damp sandwich."
+  },
+  {
+    "id": 2,
+    "word": "kerfuffle",
+    "pos": "noun",
+    "meaning": "fuss, minor chaos",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A kerfuffle broke out when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 3,
+    "word": "faff",
+    "pos": "noun / verb",
+    "meaning": "unnecessary messing about",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "This can shift between thing and action; the example uses it as a countable social act.",
+    "example": "There was a brief faff when the interactive whiteboard asked for emotional validation."
+  },
+  {
+    "id": 4,
+    "word": "palaver",
+    "pos": "noun",
+    "meaning": "needless trouble or discussion",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The whole trip became a palaver after the bus timetable started answering in riddles."
+  },
+  {
+    "id": 5,
+    "word": "codswallop",
+    "pos": "noun",
+    "meaning": "nonsense",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The owl called it codswallop, but the teapot insisted it was peer-reviewed science with excellent biscuits."
+  },
+  {
+    "id": 6,
+    "word": "gubbins",
+    "pos": "noun",
+    "meaning": "bits, stuff, equipment",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The drawer contained gubbins, three buttons, and a note from a mouse demanding better office lighting."
+  },
+  {
+    "id": 7,
+    "word": "clobber",
+    "pos": "noun",
+    "meaning": "clothes or gear",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Milo packed his clobber for the trip, then added a spoon and a tiny certificate for brave sandwiches."
+  },
+  {
+    "id": 8,
+    "word": "natter",
+    "pos": "noun / verb",
+    "meaning": "casual chat",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "This can shift between thing and action; the example uses it as a countable social act.",
+    "example": "The librarians had a natter behind the returns desk while a lost fox tried to alphabetise the biscuits."
+  },
+  {
+    "id": 9,
+    "word": "bloke",
+    "pos": "noun",
+    "meaning": "man, guy",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A cheerful bloke wandered into the staffroom and asked whether the kettle accepted emotional support coins."
+  },
+  {
+    "id": 10,
+    "word": "chap",
+    "pos": "noun",
+    "meaning": "man, fellow",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The chap at the bus stop claimed the moon owed him a fiver and produced a receipt written on toast."
+  },
+  {
+    "id": 11,
+    "word": "geezer",
+    "pos": "noun",
+    "meaning": "man; characterful older guy",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The geezer at the bus stop claimed the moon owed him a fiver and produced a receipt written on toast."
+  },
+  {
+    "id": 12,
+    "word": "punter",
+    "pos": "noun",
+    "meaning": "customer, ordinary person",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The punter at the bus stop claimed the moon owed him a fiver and produced a receipt written on toast."
+  },
+  {
+    "id": 13,
+    "word": "numpty",
+    "pos": "noun",
+    "meaning": "foolish person",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A cheerful numpty wandered into the staffroom and asked whether the kettle accepted emotional support coins."
+  },
+  {
+    "id": 14,
+    "word": "wally",
+    "pos": "noun",
+    "meaning": "silly person",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A cheerful wally wandered into the staffroom and asked whether the kettle accepted emotional support coins."
+  },
+  {
+    "id": 15,
+    "word": "muppet",
+    "pos": "noun",
+    "meaning": "incompetent fool",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A cheerful muppet wandered into the staffroom and asked whether the kettle accepted emotional support coins."
+  },
+  {
+    "id": 16,
+    "word": "plonker",
+    "pos": "noun",
+    "meaning": "fool",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A cheerful plonker wandered into the staffroom and asked whether the kettle accepted emotional support coins."
+  },
+  {
+    "id": 17,
+    "word": "pillock",
+    "pos": "noun",
+    "meaning": "idiot",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The pillock at the bus stop claimed the moon owed him a fiver and produced a receipt written on toast."
+  },
+  {
+    "id": 18,
+    "word": "mardy",
+    "pos": "adjective",
+    "meaning": "sulky, moody",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "That was a mardy little plan, until the biscuits formed a committee and demanded subtitles."
+  },
+  {
+    "id": 19,
+    "word": "chuffed",
+    "pos": "adjective",
+    "meaning": "very pleased",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "That was a chuffed little plan, until the biscuits formed a committee and demanded subtitles."
+  },
+  {
+    "id": 20,
+    "word": "knackered",
+    "pos": "adjective",
+    "meaning": "exhausted or broken",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The classroom goldfish looked knackered after winning a staring contest with the projector."
+  },
+  {
+    "id": 21,
+    "word": "peckish",
+    "pos": "adjective",
+    "meaning": "slightly hungry",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "That was a peckish little plan, until the biscuits formed a committee and demanded subtitles."
+  },
+  {
+    "id": 22,
+    "word": "skint",
+    "pos": "adjective",
+    "meaning": "out of money",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "That was a skint little plan, until the biscuits formed a committee and demanded subtitles."
+  },
+  {
+    "id": 23,
+    "word": "nippy",
+    "pos": "adjective",
+    "meaning": "cold, brisk",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The classroom goldfish looked nippy after winning a staring contest with the projector."
+  },
+  {
+    "id": 24,
+    "word": "dodgy",
+    "pos": "adjective",
+    "meaning": "suspicious, unreliable",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "That was a dodgy little plan, until the biscuits formed a committee and demanded subtitles."
+  },
+  {
+    "id": 25,
+    "word": "jammy",
+    "pos": "adjective",
+    "meaning": "lucky",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The classroom goldfish looked jammy after winning a staring contest with the projector."
+  },
+  {
+    "id": 26,
+    "word": "cheeky",
+    "pos": "adjective",
+    "meaning": "playful, slightly rude",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "That was a cheeky little plan, until the biscuits formed a committee and demanded subtitles."
+  },
+  {
+    "id": 27,
+    "word": "gobsmacked",
+    "pos": "adjective",
+    "meaning": "astonished",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The classroom goldfish looked gobsmacked after winning a staring contest with the projector."
+  },
+  {
+    "id": 28,
+    "word": "chockablock",
+    "pos": "adjective",
+    "meaning": "completely full",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The classroom goldfish looked chockablock after winning a staring contest with the projector."
+  },
+  {
+    "id": 29,
+    "word": "bog-standard",
+    "pos": "adjective",
+    "meaning": "ordinary, basic",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The classroom goldfish looked bog-standard after winning a staring contest with the projector."
+  },
+  {
+    "id": 30,
+    "word": "proper",
+    "pos": "adverb / intensifier",
+    "meaning": "very, genuinely",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "Used to intensify another word; informal, so keep it out of very formal writing.",
+    "example": "The teapot was proper proud after brewing a cup so strong it filled out a passport form."
+  },
+  {
+    "id": 31,
+    "word": "bloody",
+    "pos": "adverb / intensifier",
+    "meaning": "emphatic intensifier",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "Used to intensify another word; informal, so keep it out of very formal writing.",
+    "example": "The cupboard made a bloody dramatic entrance for a piece of furniture with no legs."
+  },
+  {
+    "id": 32,
+    "word": "dead",
+    "pos": "adverb / intensifier",
+    "meaning": "very, as in “dead good”",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "Used to intensify another word; informal, so keep it out of very formal writing.",
+    "example": "The lesson was dead quiet until the comma coughed and demanded legal representation."
+  },
+  {
+    "id": 33,
+    "word": "well",
+    "pos": "adverb / intensifier",
+    "meaning": "very, as in “well good”",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "Used to intensify another word; informal, so keep it out of very formal writing.",
+    "example": "The mushroom was well pleased with itself after solving the crossword in fountain pen."
+  },
+  {
+    "id": 34,
+    "word": "right",
+    "pos": "adverb / intensifier",
+    "meaning": "very, as in “right mess”",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "Used to intensify another word; informal, so keep it out of very formal writing.",
+    "example": "It became a right mess when the timetable tried to tango with the attendance sheet."
+  },
+  {
+    "id": 35,
+    "word": "brilliant",
+    "pos": "adjective",
+    "meaning": "excellent",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "That was a brilliant little plan, until the biscuits formed a committee and demanded subtitles."
+  },
+  {
+    "id": 36,
+    "word": "lovely",
+    "pos": "adjective",
+    "meaning": "pleasant, good",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "That was a lovely little plan, until the biscuits formed a committee and demanded subtitles."
+  },
+  {
+    "id": 37,
+    "word": "smashing",
+    "pos": "adjective",
+    "meaning": "excellent, old-fashioned",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The classroom goldfish looked smashing after winning a staring contest with the projector."
+  },
+  {
+    "id": 38,
+    "word": "cracking",
+    "pos": "adjective",
+    "meaning": "excellent",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The classroom goldfish looked cracking after winning a staring contest with the projector."
+  },
+  {
+    "id": 39,
+    "word": "mint",
+    "pos": "adjective",
+    "meaning": "excellent, especially northern slang",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The classroom goldfish looked mint after winning a staring contest with the projector."
+  },
+  {
+    "id": 40,
+    "word": "cushty",
+    "pos": "adjective",
+    "meaning": "good, fine, excellent",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The classroom goldfish looked cushty after winning a staring contest with the projector."
+  },
+  {
+    "id": 41,
+    "word": "sound",
+    "pos": "adjective",
+    "meaning": "good, trustworthy",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "That was a sound little plan, until the biscuits formed a committee and demanded subtitles."
+  },
+  {
+    "id": 42,
+    "word": "lush",
+    "pos": "adjective",
+    "meaning": "lovely, excellent",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The classroom goldfish looked lush after winning a staring contest with the projector."
+  },
+  {
+    "id": 43,
+    "word": "sorted",
+    "pos": "adjective",
+    "meaning": "fixed, arranged",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "That was a sorted little plan, until the biscuits formed a committee and demanded subtitles."
+  },
+  {
+    "id": 44,
+    "word": "bob’s your uncle",
+    "pos": "idiom",
+    "meaning": "and there you go",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A fixed expression; the meaning belongs to the whole phrase, not just the individual words.",
+    "example": "Add the dates, press today’s card, and bob’s your uncle: the app serves a tiny lexical firework."
+  },
+  {
+    "id": 45,
+    "word": "easy peasy",
+    "pos": "adjective phrase",
+    "meaning": "very easy",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A fixed expression; the meaning belongs to the whole phrase, not just the individual words.",
+    "example": "The quiz looked easy peasy until the answer key grew legs and ran under the piano."
+  },
+  {
+    "id": 46,
+    "word": "bagsy",
+    "pos": "interjection / verb",
+    "meaning": "I claim it",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "“Bagsy the comfy chair,” whispered the penguin, already wearing slippers and judging everyone."
+  },
+  {
+    "id": 47,
+    "word": "quid",
+    "pos": "noun",
+    "meaning": "pound sterling",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The drawer contained quid, three buttons, and a note from a mouse demanding better office lighting."
+  },
+  {
+    "id": 48,
+    "word": "tenner",
+    "pos": "noun",
+    "meaning": "ten-pound note",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Milo packed his tenner for the trip, then added a spoon, a compass, and a tiny certificate for brave sandwiches."
+  },
+  {
+    "id": 49,
+    "word": "fiver",
+    "pos": "noun",
+    "meaning": "five-pound note",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Milo packed his fiver for the trip, then added a spoon, a compass, and a tiny certificate for brave sandwiches."
+  },
+  {
+    "id": 50,
+    "word": "cuppa",
+    "pos": "noun",
+    "meaning": "cup of tea",
+    "register": "British informal / everyday",
+    "category": "British everyday charm",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The drawer contained cuppa, three buttons, and a note from a mouse demanding better office lighting."
+  },
+  {
+    "id": 51,
+    "word": "muddle",
+    "pos": "noun",
+    "meaning": "confused situation",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small muddle erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 52,
+    "word": "pickle",
+    "pos": "noun",
+    "meaning": "difficult situation",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a pickle after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 53,
+    "word": "scrape",
+    "pos": "noun",
+    "meaning": "awkward problem",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a scrape after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 54,
+    "word": "bind",
+    "pos": "noun",
+    "meaning": "difficult position",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small bind erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 55,
+    "word": "snag",
+    "pos": "noun",
+    "meaning": "small problem",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small snag erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 56,
+    "word": "wrinkle",
+    "pos": "noun",
+    "meaning": "small complication",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a wrinkle after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 57,
+    "word": "hitch",
+    "pos": "noun",
+    "meaning": "temporary problem",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a hitch after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 58,
+    "word": "glitch",
+    "pos": "noun",
+    "meaning": "technical fault",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small glitch erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 59,
+    "word": "quirk",
+    "pos": "noun",
+    "meaning": "odd feature",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a quirk after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 60,
+    "word": "foible",
+    "pos": "noun",
+    "meaning": "harmless weakness",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small foible erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 61,
+    "word": "flaw",
+    "pos": "noun",
+    "meaning": "weakness or defect",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a flaw after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 62,
+    "word": "blemish",
+    "pos": "noun",
+    "meaning": "small imperfection",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a blemish after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 63,
+    "word": "boon",
+    "pos": "noun",
+    "meaning": "benefit",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the boon just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 64,
+    "word": "bane",
+    "pos": "noun",
+    "meaning": "source of misery",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the bane just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 65,
+    "word": "windfall",
+    "pos": "noun",
+    "meaning": "unexpected gain",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was real windfall in the room when the dictionary began humming and everyone suddenly understood the kettle."
+  },
+  {
+    "id": 66,
+    "word": "setback",
+    "pos": "noun",
+    "meaning": "reverse, delay",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small setback erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 67,
+    "word": "breakthrough",
+    "pos": "noun",
+    "meaning": "major progress",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a breakthrough after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 68,
+    "word": "sticking point",
+    "pos": "noun phrase",
+    "meaning": "obstacle in discussion",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A fixed expression; the meaning belongs to the whole phrase, not just the individual words.",
+    "example": "The meeting became a sticking point after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 69,
+    "word": "turning point",
+    "pos": "noun phrase",
+    "meaning": "decisive moment",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A fixed expression; the meaning belongs to the whole phrase, not just the individual words.",
+    "example": "A small turning point erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 70,
+    "word": "watershed",
+    "pos": "noun",
+    "meaning": "historically decisive change",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small watershed erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 71,
+    "word": "milestone",
+    "pos": "noun",
+    "meaning": "important stage",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a milestone after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 72,
+    "word": "benchmark",
+    "pos": "noun",
+    "meaning": "standard for comparison",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was real benchmark in the room when the dictionary began humming and everyone suddenly understood the kettle."
+  },
+  {
+    "id": 73,
+    "word": "yardstick",
+    "pos": "noun",
+    "meaning": "measure of judgement",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the yardstick just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 74,
+    "word": "touchstone",
+    "pos": "noun",
+    "meaning": "test of quality",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the touchstone just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 75,
+    "word": "linchpin",
+    "pos": "noun",
+    "meaning": "crucial supporting part",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was real linchpin in the room when the dictionary began humming and everyone suddenly understood the kettle."
+  },
+  {
+    "id": 76,
+    "word": "keystone",
+    "pos": "noun",
+    "meaning": "central supporting element",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the keystone just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 77,
+    "word": "cornerstone",
+    "pos": "noun",
+    "meaning": "fundamental basis",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the cornerstone just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 78,
+    "word": "bedrock",
+    "pos": "noun",
+    "meaning": "deepest foundation",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the bedrock just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 79,
+    "word": "framework",
+    "pos": "noun",
+    "meaning": "organising structure",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the framework just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 80,
+    "word": "scaffold",
+    "pos": "noun",
+    "meaning": "temporary support structure",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the scaffold just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 81,
+    "word": "blueprint",
+    "pos": "noun",
+    "meaning": "plan",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was real blueprint in the room when the dictionary began humming and everyone suddenly understood the kettle."
+  },
+  {
+    "id": 82,
+    "word": "roadmap",
+    "pos": "noun",
+    "meaning": "staged plan",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the roadmap just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 83,
+    "word": "toolkit",
+    "pos": "noun",
+    "meaning": "set of useful methods",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the toolkit just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 84,
+    "word": "playbook",
+    "pos": "noun",
+    "meaning": "strategy guide",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was real playbook in the room when the dictionary began humming and everyone suddenly understood the kettle."
+  },
+  {
+    "id": 85,
+    "word": "rulebook",
+    "pos": "noun",
+    "meaning": "formal rules",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was real rulebook in the room when the dictionary began humming and everyone suddenly understood the kettle."
+  },
+  {
+    "id": 86,
+    "word": "loophole",
+    "pos": "noun",
+    "meaning": "gap in rules",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the loophole just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 87,
+    "word": "bottleneck",
+    "pos": "noun",
+    "meaning": "point that slows everything",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small bottleneck erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 88,
+    "word": "lever",
+    "pos": "noun",
+    "meaning": "thing that creates change",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the lever just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 89,
+    "word": "catalyst",
+    "pos": "noun",
+    "meaning": "cause of acceleration",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was real catalyst in the room when the dictionary began humming and everyone suddenly understood the kettle."
+  },
+  {
+    "id": 90,
+    "word": "trigger",
+    "pos": "noun",
+    "meaning": "thing that starts a reaction",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the trigger just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 91,
+    "word": "ripple effect",
+    "pos": "noun phrase",
+    "meaning": "spreading consequence",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A fixed expression; the meaning belongs to the whole phrase, not just the individual words.",
+    "example": "A small ripple effect erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 92,
+    "word": "knock-on effect",
+    "pos": "noun phrase",
+    "meaning": "secondary consequence",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A fixed expression; the meaning belongs to the whole phrase, not just the individual words.",
+    "example": "A small knock-on effect erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 93,
+    "word": "trade-off",
+    "pos": "noun",
+    "meaning": "gain/loss exchange",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a trade-off after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 94,
+    "word": "pay-off",
+    "pos": "noun",
+    "meaning": "benefit after effort",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a pay-off after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 95,
+    "word": "fallback",
+    "pos": "noun",
+    "meaning": "backup option",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the fallback just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 96,
+    "word": "workaround",
+    "pos": "noun",
+    "meaning": "practical unofficial solution",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the workaround just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 97,
+    "word": "shortcut",
+    "pos": "noun",
+    "meaning": "faster route",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mira noticed the shortcut just as the timetable sneezed and rearranged Monday into a small blue triangle."
+  },
+  {
+    "id": 98,
+    "word": "dead end",
+    "pos": "noun phrase",
+    "meaning": "path with no progress",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A fixed expression; the meaning belongs to the whole phrase, not just the individual words.",
+    "example": "A small dead end erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 99,
+    "word": "rabbit hole",
+    "pos": "noun phrase",
+    "meaning": "absorbing, deep topic",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A fixed expression; the meaning belongs to the whole phrase, not just the individual words.",
+    "example": "The meeting became a rabbit hole after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 100,
+    "word": "goldmine",
+    "pos": "noun",
+    "meaning": "rich source of value",
+    "register": "Useful general English",
+    "category": "Useful nouns with personality",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was real goldmine in the room when the dictionary began humming and everyone suddenly understood the kettle."
+  },
+  {
+    "id": 101,
+    "word": "probe",
+    "pos": "verb",
+    "meaning": "investigate carefully",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to probe the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 102,
+    "word": "scrutinise",
+    "pos": "verb",
+    "meaning": "examine closely",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to scrutinise the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 103,
+    "word": "weigh",
+    "pos": "verb",
+    "meaning": "consider carefully",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to weigh the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 104,
+    "word": "gauge",
+    "pos": "verb",
+    "meaning": "estimate",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to gauge the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 105,
+    "word": "reckon",
+    "pos": "verb",
+    "meaning": "think, estimate",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to reckon the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 106,
+    "word": "surmise",
+    "pos": "verb",
+    "meaning": "infer without certainty",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to surmise the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 107,
+    "word": "deduce",
+    "pos": "verb",
+    "meaning": "reason from evidence",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to deduce the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 108,
+    "word": "infer",
+    "pos": "verb",
+    "meaning": "conclude indirectly",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to infer the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 109,
+    "word": "discern",
+    "pos": "verb",
+    "meaning": "perceive clearly",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to discern the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 110,
+    "word": "pinpoint",
+    "pos": "verb",
+    "meaning": "identify exactly",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to pinpoint the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 111,
+    "word": "tease out",
+    "pos": "verb",
+    "meaning": "extract carefully",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to tease out the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 112,
+    "word": "unpack",
+    "pos": "verb",
+    "meaning": "explain in detail",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to unpack the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 113,
+    "word": "flesh out",
+    "pos": "verb",
+    "meaning": "develop more fully",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to flesh out the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 114,
+    "word": "map out",
+    "pos": "verb",
+    "meaning": "plan or describe",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to map out the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 115,
+    "word": "sketch",
+    "pos": "verb",
+    "meaning": "outline roughly",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to sketch the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 116,
+    "word": "frame",
+    "pos": "verb",
+    "meaning": "present in a particular way",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to frame the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 117,
+    "word": "reframe",
+    "pos": "verb",
+    "meaning": "change interpretation",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to reframe the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 118,
+    "word": "distil",
+    "pos": "verb",
+    "meaning": "reduce to essence",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to distil the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 119,
+    "word": "condense",
+    "pos": "verb",
+    "meaning": "shorten",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to condense the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 120,
+    "word": "streamline",
+    "pos": "verb",
+    "meaning": "make efficient",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to streamline the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 121,
+    "word": "refine",
+    "pos": "verb",
+    "meaning": "improve by detail",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to refine the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 122,
+    "word": "polish",
+    "pos": "verb",
+    "meaning": "improve final form",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to polish the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 123,
+    "word": "revamp",
+    "pos": "verb",
+    "meaning": "improve or redesign",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to revamp the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 124,
+    "word": "overhaul",
+    "pos": "verb",
+    "meaning": "change thoroughly",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to overhaul the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 125,
+    "word": "tweak",
+    "pos": "verb",
+    "meaning": "make small changes",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to tweak the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 126,
+    "word": "fine-tune",
+    "pos": "verb",
+    "meaning": "adjust precisely",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to fine-tune the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 127,
+    "word": "calibrate",
+    "pos": "verb",
+    "meaning": "adjust to correct standard",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to calibrate the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 128,
+    "word": "optimise",
+    "pos": "verb",
+    "meaning": "make as effective as possible",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to optimise the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 129,
+    "word": "prototype",
+    "pos": "verb",
+    "meaning": "build test version",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to prototype the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 130,
+    "word": "iterate",
+    "pos": "verb",
+    "meaning": "repeat and improve",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to iterate the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 131,
+    "word": "bootstrap",
+    "pos": "verb",
+    "meaning": "start with minimal resources",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to bootstrap the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 132,
+    "word": "cobble together",
+    "pos": "verb",
+    "meaning": "assemble roughly",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to cobble together the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 133,
+    "word": "bodged",
+    "pos": "verb",
+    "meaning": "fixed badly but practically",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to bodged the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 134,
+    "word": "jury-rig",
+    "pos": "verb",
+    "meaning": "improvise a solution",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to jury-rig the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 135,
+    "word": "repurpose",
+    "pos": "verb",
+    "meaning": "use differently",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to repurpose the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 136,
+    "word": "leverage",
+    "pos": "verb",
+    "meaning": "use advantageously",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to leverage the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 137,
+    "word": "harness",
+    "pos": "verb",
+    "meaning": "use productively",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to harness the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 138,
+    "word": "synergise",
+    "pos": "verb",
+    "meaning": "make things work together",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to synergise the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 139,
+    "word": "orchestrate",
+    "pos": "verb",
+    "meaning": "coordinate skilfully",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to orchestrate the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 140,
+    "word": "broker",
+    "pos": "verb",
+    "meaning": "arrange agreement",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to broker the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 141,
+    "word": "mediate",
+    "pos": "verb",
+    "meaning": "help resolve conflict",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to mediate the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 142,
+    "word": "nudge",
+    "pos": "verb",
+    "meaning": "gently influence",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to nudge the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 143,
+    "word": "steer",
+    "pos": "verb",
+    "meaning": "guide direction",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to steer the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 144,
+    "word": "spur",
+    "pos": "verb",
+    "meaning": "encourage action",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to spur the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 145,
+    "word": "galvanise",
+    "pos": "verb",
+    "meaning": "shock into action",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to galvanise the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 146,
+    "word": "bolster",
+    "pos": "verb",
+    "meaning": "strengthen",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to bolster the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 147,
+    "word": "shore up",
+    "pos": "verb",
+    "meaning": "support",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to shore up the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 148,
+    "word": "undermine",
+    "pos": "verb",
+    "meaning": "weaken secretly",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to undermine the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 149,
+    "word": "derail",
+    "pos": "verb",
+    "meaning": "knock off course",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Mira had to derail the lesson plan after the classroom hamster unionised and demanded a tiny pension."
+  },
+  {
+    "id": 150,
+    "word": "scupper",
+    "pos": "verb",
+    "meaning": "ruin a plan",
+    "register": "Precise thinking / making verb",
+    "category": "Strong verbs for thinking, making, and doing",
+    "note": "A verb is doing-word grammar: here it names the action, not the object.",
+    "example": "Nora tried to scupper the problem before the photocopier began speaking fluent pirate."
+  },
+  {
+    "id": 151,
+    "word": "apt",
+    "pos": "adjective",
+    "meaning": "suitable, well-chosen",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A apt little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 152,
+    "word": "deft",
+    "pos": "adjective",
+    "meaning": "skilful and quick",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A deft little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 153,
+    "word": "nimble",
+    "pos": "adjective",
+    "meaning": "quick, flexible",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A nimble little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 154,
+    "word": "shrewd",
+    "pos": "adjective",
+    "meaning": "intelligently practical",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A shrewd little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 155,
+    "word": "savvy",
+    "pos": "adjective",
+    "meaning": "street-smart, knowledgeable",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A savvy little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 156,
+    "word": "astute",
+    "pos": "adjective",
+    "meaning": "perceptive and clever",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella astute after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 157,
+    "word": "canny",
+    "pos": "adjective",
+    "meaning": "careful, clever",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A canny little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 158,
+    "word": "wily",
+    "pos": "adjective",
+    "meaning": "cunning",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A wily little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 159,
+    "word": "crafty",
+    "pos": "adjective",
+    "meaning": "slyly clever",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A crafty little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 160,
+    "word": "resourceful",
+    "pos": "adjective",
+    "meaning": "good at finding solutions",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A resourceful little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 161,
+    "word": "tenacious",
+    "pos": "adjective",
+    "meaning": "persistent",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A tenacious little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 162,
+    "word": "dogged",
+    "pos": "adjective",
+    "meaning": "determined",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella dogged after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 163,
+    "word": "stubborn",
+    "pos": "adjective",
+    "meaning": "refusing to change",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A stubborn little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 164,
+    "word": "steadfast",
+    "pos": "adjective",
+    "meaning": "loyal, firm",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A steadfast little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 165,
+    "word": "resilient",
+    "pos": "adjective",
+    "meaning": "able to recover",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A resilient little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 166,
+    "word": "robust",
+    "pos": "adjective",
+    "meaning": "strong, reliable",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A robust little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 167,
+    "word": "sturdy",
+    "pos": "adjective",
+    "meaning": "strongly built",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A sturdy little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 168,
+    "word": "flimsy",
+    "pos": "adjective",
+    "meaning": "weak, insubstantial",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella flimsy after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 169,
+    "word": "shoddy",
+    "pos": "adjective",
+    "meaning": "badly made",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A shoddy little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 170,
+    "word": "wonky",
+    "pos": "adjective",
+    "meaning": "not straight or reliable",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella wonky after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 171,
+    "word": "rickety",
+    "pos": "adjective",
+    "meaning": "unstable",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A rickety little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 172,
+    "word": "clunky",
+    "pos": "adjective",
+    "meaning": "awkward, heavy, inelegant",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella clunky after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 173,
+    "word": "slick",
+    "pos": "adjective",
+    "meaning": "smooth, professional",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella slick after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 174,
+    "word": "snazzy",
+    "pos": "adjective",
+    "meaning": "stylish, flashy",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A snazzy little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 175,
+    "word": "swish",
+    "pos": "adjective",
+    "meaning": "stylish, posh",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella swish after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 176,
+    "word": "plush",
+    "pos": "adjective",
+    "meaning": "luxurious",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella plush after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 177,
+    "word": "posh",
+    "pos": "adjective",
+    "meaning": "upper-class, fancy",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella posh after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 178,
+    "word": "naff",
+    "pos": "adjective",
+    "meaning": "tacky, uncool",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A naff little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 179,
+    "word": "twee",
+    "pos": "adjective",
+    "meaning": "overly cute",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A twee little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 180,
+    "word": "gaudy",
+    "pos": "adjective",
+    "meaning": "too bright or showy",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella gaudy after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 181,
+    "word": "garish",
+    "pos": "adjective",
+    "meaning": "unpleasantly bright",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella garish after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 182,
+    "word": "drab",
+    "pos": "adjective",
+    "meaning": "dull-looking",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A drab little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 183,
+    "word": "dreary",
+    "pos": "adjective",
+    "meaning": "dull and depressing",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A dreary little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 184,
+    "word": "bleak",
+    "pos": "adjective",
+    "meaning": "cold, empty, grim",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A bleak little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 185,
+    "word": "murky",
+    "pos": "adjective",
+    "meaning": "unclear, dark, suspicious",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella murky after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 186,
+    "word": "grubby",
+    "pos": "adjective",
+    "meaning": "dirty",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A grubby little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 187,
+    "word": "scruffy",
+    "pos": "adjective",
+    "meaning": "untidy",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella scruffy after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 188,
+    "word": "pristine",
+    "pos": "adjective",
+    "meaning": "perfectly clean/new",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella pristine after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 189,
+    "word": "immaculate",
+    "pos": "adjective",
+    "meaning": "spotless",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella immaculate after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 190,
+    "word": "spotless",
+    "pos": "adjective",
+    "meaning": "perfectly clean",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A spotless little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 191,
+    "word": "ramshackle",
+    "pos": "adjective",
+    "meaning": "badly maintained",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A ramshackle little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 192,
+    "word": "higgledy-piggledy",
+    "pos": "adjective",
+    "meaning": "disordered",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A higgledy-piggledy little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 193,
+    "word": "topsy-turvy",
+    "pos": "adjective",
+    "meaning": "upside down, chaotic",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella topsy-turvy after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 194,
+    "word": "hotchpotch",
+    "pos": "adjective",
+    "meaning": "mixed-up collection",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella hotchpotch after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 195,
+    "word": "piecemeal",
+    "pos": "adjective",
+    "meaning": "done in fragments",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A piecemeal little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 196,
+    "word": "makeshift",
+    "pos": "adjective",
+    "meaning": "temporary, improvised",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella makeshift after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 197,
+    "word": "bespoke",
+    "pos": "adjective",
+    "meaning": "custom-made",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A bespoke little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 198,
+    "word": "off-the-shelf",
+    "pos": "adjective",
+    "meaning": "ready-made",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella off-the-shelf after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 199,
+    "word": "bog-standard",
+    "pos": "adjective",
+    "meaning": "basic, ordinary",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The substitute teacher called the umbrella bog-standard after it graded the homework and bowed to the stapler."
+  },
+  {
+    "id": 200,
+    "word": "state-of-the-art",
+    "pos": "adjective",
+    "meaning": "most advanced",
+    "register": "Descriptive everyday–educated English",
+    "category": "Excellent adjectives",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "A state-of-the-art little moon hovered over the desk, quietly judging everyone’s handwriting."
+  },
+  {
+    "id": 201,
+    "word": "roughly",
+    "pos": "adverb",
+    "meaning": "approximately",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor roughly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 202,
+    "word": "broadly",
+    "pos": "adverb",
+    "meaning": "generally",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit broadly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 203,
+    "word": "loosely",
+    "pos": "adverb",
+    "meaning": "not exactly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit loosely announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 204,
+    "word": "strictly",
+    "pos": "adverb",
+    "meaning": "precisely",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor strictly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 205,
+    "word": "technically",
+    "pos": "adverb",
+    "meaning": "according to exact rules",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor technically apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 206,
+    "word": "practically",
+    "pos": "adverb",
+    "meaning": "in real use",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor practically apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 207,
+    "word": "arguably",
+    "pos": "adverb",
+    "meaning": "it can be argued",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit arguably announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 208,
+    "word": "ostensibly",
+    "pos": "adverb",
+    "meaning": "apparently, supposedly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor ostensibly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 209,
+    "word": "seemingly",
+    "pos": "adverb",
+    "meaning": "apparently",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit seemingly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 210,
+    "word": "apparently",
+    "pos": "adverb",
+    "meaning": "it appears that",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor apparently apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 211,
+    "word": "presumably",
+    "pos": "adverb",
+    "meaning": "probably, based on assumption",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor presumably apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 212,
+    "word": "allegedly",
+    "pos": "adverb",
+    "meaning": "claimed but unproven",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit allegedly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 213,
+    "word": "supposedly",
+    "pos": "adverb",
+    "meaning": "said to be true",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor supposedly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 214,
+    "word": "evidently",
+    "pos": "adverb",
+    "meaning": "clearly, from evidence",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor evidently apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 215,
+    "word": "plainly",
+    "pos": "adverb",
+    "meaning": "obviously",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit plainly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 216,
+    "word": "decidedly",
+    "pos": "adverb",
+    "meaning": "definitely",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit decidedly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 217,
+    "word": "markedly",
+    "pos": "adverb",
+    "meaning": "noticeably",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit markedly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 218,
+    "word": "subtly",
+    "pos": "adverb",
+    "meaning": "in a delicate hidden way",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit subtly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 219,
+    "word": "neatly",
+    "pos": "adverb",
+    "meaning": "elegantly, tidily",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit neatly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 220,
+    "word": "aptly",
+    "pos": "adverb",
+    "meaning": "appropriately",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor aptly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 221,
+    "word": "deftly",
+    "pos": "adverb",
+    "meaning": "skilfully",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor deftly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 222,
+    "word": "clumsily",
+    "pos": "adverb",
+    "meaning": "awkwardly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor clumsily apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 223,
+    "word": "hastily",
+    "pos": "adverb",
+    "meaning": "too quickly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor hastily apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 224,
+    "word": "gingerly",
+    "pos": "adverb",
+    "meaning": "carefully, cautiously",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit gingerly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 225,
+    "word": "warily",
+    "pos": "adverb",
+    "meaning": "cautiously, suspiciously",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor warily apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 226,
+    "word": "briskly",
+    "pos": "adverb",
+    "meaning": "quickly and energetically",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor briskly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 227,
+    "word": "doggedly",
+    "pos": "adverb",
+    "meaning": "persistently",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit doggedly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 228,
+    "word": "reluctantly",
+    "pos": "adverb",
+    "meaning": "unwillingly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit reluctantly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 229,
+    "word": "begrudgingly",
+    "pos": "adverb",
+    "meaning": "resentfully",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit begrudgingly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 230,
+    "word": "wholeheartedly",
+    "pos": "adverb",
+    "meaning": "sincerely, fully",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit wholeheartedly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 231,
+    "word": "half-heartedly",
+    "pos": "adverb",
+    "meaning": "without enthusiasm",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor half-heartedly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 232,
+    "word": "bluntly",
+    "pos": "adverb",
+    "meaning": "directly, without softening",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor bluntly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 233,
+    "word": "tactfully",
+    "pos": "adverb",
+    "meaning": "sensitively",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor tactfully apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 234,
+    "word": "frankly",
+    "pos": "adverb",
+    "meaning": "honestly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit frankly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 235,
+    "word": "candidly",
+    "pos": "adverb",
+    "meaning": "openly, honestly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor candidly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 236,
+    "word": "wryly",
+    "pos": "adverb",
+    "meaning": "dryly, ironically",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit wryly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 237,
+    "word": "archly",
+    "pos": "adverb",
+    "meaning": "teasingly, knowingly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit archly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 238,
+    "word": "smugly",
+    "pos": "adverb",
+    "meaning": "self-satisfiedly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit smugly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 239,
+    "word": "sheepishly",
+    "pos": "adverb",
+    "meaning": "embarrassedly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor sheepishly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 240,
+    "word": "cheerfully",
+    "pos": "adverb",
+    "meaning": "happily",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit cheerfully announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 241,
+    "word": "merrily",
+    "pos": "adverb",
+    "meaning": "happily, lightly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor merrily apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 242,
+    "word": "glumly",
+    "pos": "adverb",
+    "meaning": "sadly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor glumly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 243,
+    "word": "grimly",
+    "pos": "adverb",
+    "meaning": "seriously, bleakly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor grimly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 244,
+    "word": "solemnly",
+    "pos": "adverb",
+    "meaning": "seriously",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit solemnly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 245,
+    "word": "airily",
+    "pos": "adverb",
+    "meaning": "casually, lightly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor airily apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 246,
+    "word": "tersely",
+    "pos": "adverb",
+    "meaning": "briefly, sharply",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor tersely apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 247,
+    "word": "succinctly",
+    "pos": "adverb",
+    "meaning": "briefly and clearly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit succinctly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 248,
+    "word": "lavishly",
+    "pos": "adverb",
+    "meaning": "generously, extravagantly",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor lavishly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 249,
+    "word": "sparingly",
+    "pos": "adverb",
+    "meaning": "in small amounts",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "Professor Biscuit sparingly announced that the vending machine had become a duchess."
+  },
+  {
+    "id": 250,
+    "word": "painstakingly",
+    "pos": "adverb",
+    "meaning": "with great care",
+    "register": "Stance / manner adverb",
+    "category": "Adverbs and useful stance words",
+    "note": "An adverb: it modifies the action or marks the speaker’s attitude toward the claim.",
+    "example": "The mayor painstakingly apologised to a suspicious pigeon for mispronouncing Tuesday."
+  },
+  {
+    "id": 251,
+    "word": "balderdash",
+    "pos": "noun",
+    "meaning": "nonsense",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "“Pure balderdash,” said the cat, as the vending machine explained quantum grammar in a French accent."
+  },
+  {
+    "id": 252,
+    "word": "poppycock",
+    "pos": "noun",
+    "meaning": "nonsense",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "“Pure poppycock,” said the cat, as the vending machine explained quantum grammar in a French accent."
+  },
+  {
+    "id": 253,
+    "word": "twaddle",
+    "pos": "noun",
+    "meaning": "silly talk",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The owl called it twaddle, but the teapot insisted it was peer-reviewed science with excellent biscuits."
+  },
+  {
+    "id": 254,
+    "word": "drivel",
+    "pos": "noun",
+    "meaning": "foolish talk",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "“Pure drivel,” said the cat, as the vending machine explained quantum grammar in a French accent."
+  },
+  {
+    "id": 255,
+    "word": "claptrap",
+    "pos": "noun",
+    "meaning": "absurd talk",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The owl called it claptrap, but the teapot insisted it was peer-reviewed science with excellent biscuits."
+  },
+  {
+    "id": 256,
+    "word": "hogwash",
+    "pos": "noun",
+    "meaning": "nonsense",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The owl called it hogwash, but the teapot insisted it was peer-reviewed science with excellent biscuits."
+  },
+  {
+    "id": 257,
+    "word": "malarkey",
+    "pos": "noun",
+    "meaning": "nonsense, fuss",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "“Pure malarkey,” said the cat, as the vending machine explained quantum grammar in a French accent."
+  },
+  {
+    "id": 258,
+    "word": "tomfoolery",
+    "pos": "noun",
+    "meaning": "foolish behaviour",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a tomfoolery after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 259,
+    "word": "shenanigans",
+    "pos": "noun",
+    "meaning": "mischief",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small shenanigans erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 260,
+    "word": "jiggery-pokery",
+    "pos": "noun",
+    "meaning": "dishonest trickery",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a jiggery-pokery after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 261,
+    "word": "skulduggery",
+    "pos": "noun",
+    "meaning": "secret dishonest behaviour",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a skulduggery after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 262,
+    "word": "humbug",
+    "pos": "noun",
+    "meaning": "deceptive nonsense",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "“Pure humbug,” said the cat, as the vending machine explained quantum grammar in a French accent."
+  },
+  {
+    "id": 263,
+    "word": "flimflam",
+    "pos": "noun",
+    "meaning": "trickery, nonsense",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "“Pure flimflam,” said the cat, as the vending machine explained quantum grammar in a French accent."
+  },
+  {
+    "id": 264,
+    "word": "brouhaha",
+    "pos": "noun",
+    "meaning": "noisy fuss",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a brouhaha after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 265,
+    "word": "hoo-ha",
+    "pos": "noun",
+    "meaning": "fuss",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a hoo-ha after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 266,
+    "word": "rumpus",
+    "pos": "noun",
+    "meaning": "noisy disturbance",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a rumpus after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 267,
+    "word": "fracas",
+    "pos": "noun",
+    "meaning": "noisy argument",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a fracas after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 268,
+    "word": "imbroglio",
+    "pos": "noun",
+    "meaning": "complicated mess",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a imbroglio after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 269,
+    "word": "debacle",
+    "pos": "noun",
+    "meaning": "embarrassing failure",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a debacle after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 270,
+    "word": "fiasco",
+    "pos": "noun",
+    "meaning": "complete failure",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small fiasco erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 271,
+    "word": "quandary",
+    "pos": "noun",
+    "meaning": "difficult dilemma",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small quandary erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 272,
+    "word": "conundrum",
+    "pos": "noun",
+    "meaning": "puzzle",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A small conundrum erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 273,
+    "word": "riddle",
+    "pos": "noun",
+    "meaning": "mystery",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The meeting became a riddle after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 274,
+    "word": "mystique",
+    "pos": "noun",
+    "meaning": "attractive mystery",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little mystique flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 275,
+    "word": "whimsy",
+    "pos": "noun",
+    "meaning": "playful strangeness",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little whimsy flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 276,
+    "word": "fancy",
+    "pos": "noun",
+    "meaning": "imagination or liking",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Theo took a sudden fancy to the moon-shaped biscuit and addressed it as “your brightness.”"
+  },
+  {
+    "id": 277,
+    "word": "notion",
+    "pos": "noun",
+    "meaning": "idea",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little notion flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 278,
+    "word": "hunch",
+    "pos": "noun",
+    "meaning": "intuitive guess",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange hunch in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 279,
+    "word": "inkling",
+    "pos": "noun",
+    "meaning": "slight idea",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange inkling in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 280,
+    "word": "glimmer",
+    "pos": "noun",
+    "meaning": "faint sign",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little glimmer flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 281,
+    "word": "flicker",
+    "pos": "noun",
+    "meaning": "brief sign",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange flicker in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 282,
+    "word": "twinge",
+    "pos": "noun",
+    "meaning": "slight feeling",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange twinge in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 283,
+    "word": "pang",
+    "pos": "noun",
+    "meaning": "sudden emotional pain",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange pang in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 284,
+    "word": "yearning",
+    "pos": "noun",
+    "meaning": "deep longing",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little yearning flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 285,
+    "word": "reverie",
+    "pos": "noun",
+    "meaning": "dreamy thought",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange reverie in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 286,
+    "word": "musing",
+    "pos": "noun",
+    "meaning": "reflective thought",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little musing flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 287,
+    "word": "rumination",
+    "pos": "noun",
+    "meaning": "deep repeated thinking",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange rumination in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 288,
+    "word": "brooding",
+    "pos": "noun",
+    "meaning": "dark thinking",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange brooding in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 289,
+    "word": "melancholy",
+    "pos": "noun",
+    "meaning": "gentle sadness",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange melancholy in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 290,
+    "word": "mirth",
+    "pos": "noun",
+    "meaning": "amusement, laughter",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange mirth in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 291,
+    "word": "glee",
+    "pos": "noun",
+    "meaning": "delight",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little glee flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 292,
+    "word": "relish",
+    "pos": "noun",
+    "meaning": "enjoyment",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The cat listened with relish as the biscuits described their escape plan."
+  },
+  {
+    "id": 293,
+    "word": "zeal",
+    "pos": "noun",
+    "meaning": "energetic enthusiasm",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange zeal in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 294,
+    "word": "ardour",
+    "pos": "noun",
+    "meaning": "passionate enthusiasm",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little ardour flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 295,
+    "word": "pluck",
+    "pos": "noun",
+    "meaning": "courage",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little pluck flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 296,
+    "word": "mettle",
+    "pos": "noun",
+    "meaning": "inner strength",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little mettle flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 297,
+    "word": "grit",
+    "pos": "noun",
+    "meaning": "toughness",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was a strange grit in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 298,
+    "word": "gumption",
+    "pos": "noun",
+    "meaning": "initiative, courage",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little gumption flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 299,
+    "word": "wherewithal",
+    "pos": "noun",
+    "meaning": "necessary means or resources",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "Mina finally found the wherewithal to open the cupboard, question the soup, and continue the lesson."
+  },
+  {
+    "id": 300,
+    "word": "nous",
+    "pos": "noun",
+    "meaning": "practical intelligence",
+    "register": "Literary, old-fashioned, or playful",
+    "category": "Old-fashioned, literary, charming",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "A little nous flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 301,
+    "word": "afternoonified",
+    "pos": "adjective",
+    "meaning": "affectedly refined",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "It was an afternoonified afternoon, especially once the piano accused the curtains of podsnappery."
+  },
+  {
+    "id": 302,
+    "word": "bang-up",
+    "pos": "adjective",
+    "meaning": "excellent, first-rate",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The guest arrived looking bang-up, carrying a rain napper and a scandalously confident sandwich."
+  },
+  {
+    "id": 303,
+    "word": "bricky",
+    "pos": "adjective",
+    "meaning": "brave, solid",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The guest arrived looking bricky, carrying a rain napper and a scandalously confident sandwich."
+  },
+  {
+    "id": 304,
+    "word": "butter upon bacon",
+    "pos": "idiom / phrase",
+    "meaning": "too much extravagance",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The meeting became a butter upon bacon after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 305,
+    "word": "collie shangles",
+    "pos": "noun",
+    "meaning": "quarrels, arguments",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The meeting became a collie shangles after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 306,
+    "word": "doing the bear",
+    "pos": "verb phrase",
+    "meaning": "behaving roughly",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "Uncle Len started doing the bear behind the curtains, which worried the cat but impressed the cheese."
+  },
+  {
+    "id": 307,
+    "word": "fly rink",
+    "pos": "noun",
+    "meaning": "bald head",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The drawer contained fly rink, three buttons, and a note from a mouse demanding better office lighting."
+  },
+  {
+    "id": 308,
+    "word": "gigglemug",
+    "pos": "noun",
+    "meaning": "smiling face",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A small gigglemug erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 309,
+    "word": "got the morbs",
+    "pos": "idiom / phrase",
+    "meaning": "feeling gloomy",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "After the umbrella left without saying goodbye, the clerk got the morbs and stared nobly at a sausage."
+  },
+  {
+    "id": 310,
+    "word": "mutton shunter",
+    "pos": "noun",
+    "meaning": "policeman",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The mutton shunter at the bus stop claimed the moon owed him a fiver and produced a receipt written on toast."
+  },
+  {
+    "id": 311,
+    "word": "orf chump",
+    "pos": "idiom / phrase",
+    "meaning": "no appetite",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The duchess was orf chump after the pudding winked at her from across the table."
+  },
+  {
+    "id": 312,
+    "word": "podsnappery",
+    "pos": "noun",
+    "meaning": "smug narrow-mindedness",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "There was a strange podsnappery in the corridor, as if the wallpaper had remembered a joke from 1892."
+  },
+  {
+    "id": 313,
+    "word": "rain napper",
+    "pos": "noun",
+    "meaning": "umbrella",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "Milo packed his rain napper for the trip, then added a spoon, a compass, and a tiny certificate for brave sandwiches."
+  },
+  {
+    "id": 314,
+    "word": "sauce-box",
+    "pos": "noun",
+    "meaning": "cheeky person",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A cheerful sauce-box wandered into the staffroom and asked whether the kettle accepted emotional support coins."
+  },
+  {
+    "id": 315,
+    "word": "skilamalink",
+    "pos": "adjective",
+    "meaning": "secret or shady",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The guest arrived looking skilamalink, carrying a rain napper and a scandalously confident sandwich."
+  },
+  {
+    "id": 316,
+    "word": "smothering a parrot",
+    "pos": "verb phrase",
+    "meaning": "drinking absinthe",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "At the absurd Victorian picnic, Algernon was smothering a parrot while the lemonade looked morally worried."
+  },
+  {
+    "id": 317,
+    "word": "tight as a boiled owl",
+    "pos": "idiom / phrase",
+    "meaning": "very drunk",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The colonel was tight as a boiled owl and tried to salute a hat stand."
+  },
+  {
+    "id": 318,
+    "word": "whooperups",
+    "pos": "noun",
+    "meaning": "noisy inferior singers",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A small whooperups erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 319,
+    "word": "bags o’ mystery",
+    "pos": "noun",
+    "meaning": "sausages",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The market sold bags o’ mystery, and the sausages refused to explain their long-term plans."
+  },
+  {
+    "id": 320,
+    "word": "church-bell",
+    "pos": "noun",
+    "meaning": "talkative woman, dated/risky",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Dated and sexist-sounding; useful as historical slang, not as a polite modern label.",
+    "example": "In the old slang dictionary, a church-bell meant a talkative woman; today, use it only when discussing the dated phrase itself."
+  },
+  {
+    "id": 321,
+    "word": "cop a mouse",
+    "pos": "verb phrase",
+    "meaning": "get a black eye",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "Mabel managed to cop a mouse just as the brass lamp began taking attendance."
+  },
+  {
+    "id": 322,
+    "word": "daddles",
+    "pos": "noun",
+    "meaning": "hands",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The drawer contained daddles, three buttons, and a note from a mouse demanding better office lighting."
+  },
+  {
+    "id": 323,
+    "word": "damfino",
+    "pos": "idiom / phrase",
+    "meaning": "“damned if I know”",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "“Damfino,” said the footman, when asked why the chandelier was wearing boxing gloves."
+  },
+  {
+    "id": 324,
+    "word": "door-knocker",
+    "pos": "noun",
+    "meaning": "beard",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "Milo packed his door-knocker for the trip, then added a spoon, a compass, and a tiny certificate for brave sandwiches."
+  },
+  {
+    "id": 325,
+    "word": "enthuzimuzzy",
+    "pos": "noun",
+    "meaning": "mock enthusiasm",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A little enthuzimuzzy flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 326,
+    "word": "fifteen puzzle",
+    "pos": "noun",
+    "meaning": "complete confusion",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The meeting became a fifteen puzzle after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 327,
+    "word": "gas-pipes",
+    "pos": "noun",
+    "meaning": "tight trousers",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The drawer contained gas-pipes, three buttons, and a note from a mouse demanding better office lighting."
+  },
+  {
+    "id": 328,
+    "word": "grumbletonian",
+    "pos": "noun",
+    "meaning": "habitual complainer",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A cheerful grumbletonian wandered into the staffroom and asked whether the kettle accepted emotional support coins."
+  },
+  {
+    "id": 329,
+    "word": "half-rats",
+    "pos": "adjective",
+    "meaning": "partly drunk",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The guest arrived looking half-rats, carrying a rain napper and a scandalously confident sandwich."
+  },
+  {
+    "id": 330,
+    "word": "lallygag",
+    "pos": "verb phrase",
+    "meaning": "waste time",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "Mabel managed to lallygag just as the brass lamp began taking attendance."
+  },
+  {
+    "id": 331,
+    "word": "mafficking",
+    "pos": "noun",
+    "meaning": "rowdy celebration",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The meeting became a mafficking after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 332,
+    "word": "mops and brooms",
+    "pos": "noun",
+    "meaning": "intoxicated state",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A small mops and brooms erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 333,
+    "word": "nanty narking",
+    "pos": "noun",
+    "meaning": "great fun",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A small nanty narking erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 334,
+    "word": "nose-ender",
+    "pos": "noun",
+    "meaning": "punch on the nose",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A small nose-ender erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 335,
+    "word": "powdering hair",
+    "pos": "verb phrase",
+    "meaning": "getting drunk",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "By midnight the roysterers were powdering hair, and even the grandfather clock asked for a glass of water."
+  },
+  {
+    "id": 336,
+    "word": "rantipole",
+    "pos": "noun",
+    "meaning": "wild, disorderly person",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The rantipole at the bus stop claimed the moon owed him a fiver and produced a receipt written on toast."
+  },
+  {
+    "id": 337,
+    "word": "roysterer",
+    "pos": "noun",
+    "meaning": "noisy reveller",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A cheerful roysterer wandered into the staffroom and asked whether the kettle accepted emotional support coins."
+  },
+  {
+    "id": 338,
+    "word": "shoddyocracy",
+    "pos": "noun",
+    "meaning": "newly rich vulgar elite",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A little shoddyocracy flickered in Bea when the library clock whispered, “Try the blue door.”"
+  },
+  {
+    "id": 339,
+    "word": "slang-whanger",
+    "pos": "noun",
+    "meaning": "loud abusive talker",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The slang-whanger at the bus stop claimed the moon owed him a fiver and produced a receipt written on toast."
+  },
+  {
+    "id": 340,
+    "word": "snoozle",
+    "pos": "verb phrase",
+    "meaning": "to sleep, doze",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "Mabel managed to snoozle just as the brass lamp began taking attendance."
+  },
+  {
+    "id": 341,
+    "word": "tatterdemalion",
+    "pos": "noun",
+    "meaning": "ragged person",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A cheerful tatterdemalion wandered into the staffroom and asked whether the kettle accepted emotional support coins."
+  },
+  {
+    "id": 342,
+    "word": "toco",
+    "pos": "noun",
+    "meaning": "punishment, beating",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "The meeting became a toco after the minutes escaped and hid inside the printer."
+  },
+  {
+    "id": 343,
+    "word": "tosh",
+    "pos": "noun",
+    "meaning": "rubbish, nonsense",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "A small tosh erupted when the biscuits discovered they had been arranged by height."
+  },
+  {
+    "id": 344,
+    "word": "twirl the baton",
+    "pos": "verb phrase",
+    "meaning": "act grandly",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "Mabel managed to twirl the baton just as the brass lamp began taking attendance."
+  },
+  {
+    "id": 345,
+    "word": "walk into the brown",
+    "pos": "verb phrase",
+    "meaning": "disappear, vanish",
+    "register": "Historical comic flavour",
+    "category": "Victorian / 19th-century flavour",
+    "note": "Treat this as historical flavour: funny in a stylised sentence, strange in ordinary modern conversation.",
+    "example": "After the speech, the suspicious magician walked into the brown, leaving only a hat and a smug cabbage."
+  },
+  {
+    "id": 346,
+    "word": "synergy",
+    "pos": "noun",
+    "meaning": "combined effect greater than separate parts",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The project finally found synergy when the spreadsheet stopped sulking and the biscuits joined the workflow."
+  },
+  {
+    "id": 347,
+    "word": "friction",
+    "pos": "noun",
+    "meaning": "obstacle that slows action",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was just enough friction in the plan to make the projector nod like a tiny consultant."
+  },
+  {
+    "id": 348,
+    "word": "traction",
+    "pos": "noun",
+    "meaning": "evidence something is gaining success",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was just enough traction in the plan to make the projector nod like a tiny consultant."
+  },
+  {
+    "id": 349,
+    "word": "bandwidth",
+    "pos": "noun",
+    "meaning": "capacity, time, attention",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The project finally found bandwidth when the spreadsheet stopped sulking and the biscuits joined the workflow."
+  },
+  {
+    "id": 350,
+    "word": "leverage",
+    "pos": "noun",
+    "meaning": "useful advantage",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The project finally found leverage when the spreadsheet stopped sulking and the biscuits joined the workflow."
+  },
+  {
+    "id": 351,
+    "word": "alignment",
+    "pos": "noun",
+    "meaning": "shared direction",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The project finally found alignment when the spreadsheet stopped sulking and the biscuits joined the workflow."
+  },
+  {
+    "id": 352,
+    "word": "buy-in",
+    "pos": "noun",
+    "meaning": "agreement, support",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was just enough buy-in in the plan to make the projector nod like a tiny consultant."
+  },
+  {
+    "id": 353,
+    "word": "stakeholder",
+    "pos": "noun",
+    "meaning": "person affected by a decision",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was just enough stakeholder in the plan to make the projector nod like a tiny consultant."
+  },
+  {
+    "id": 354,
+    "word": "workflow",
+    "pos": "noun",
+    "meaning": "sequence of work steps",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The project finally found workflow when the spreadsheet stopped sulking and the biscuits joined the workflow."
+  },
+  {
+    "id": 355,
+    "word": "pipeline",
+    "pos": "noun",
+    "meaning": "staged process",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was just enough pipeline in the plan to make the projector nod like a tiny consultant."
+  },
+  {
+    "id": 356,
+    "word": "feedback loop",
+    "pos": "noun phrase",
+    "meaning": "repeated cause-and-effect cycle",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A fixed expression; the meaning belongs to the whole phrase, not just the individual words.",
+    "example": "The project finally found feedback loop when the spreadsheet stopped sulking and the biscuits joined the workflow."
+  },
+  {
+    "id": 357,
+    "word": "signal",
+    "pos": "noun",
+    "meaning": "meaningful information",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was just enough signal in the plan to make the projector nod like a tiny consultant."
+  },
+  {
+    "id": 358,
+    "word": "noise",
+    "pos": "noun",
+    "meaning": "distracting irrelevant information",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was just enough noise in the plan to make the projector nod like a tiny consultant."
+  },
+  {
+    "id": 359,
+    "word": "pattern",
+    "pos": "noun",
+    "meaning": "repeated structure",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was just enough pattern in the plan to make the projector nod like a tiny consultant."
+  },
+  {
+    "id": 360,
+    "word": "heuristic",
+    "pos": "noun",
+    "meaning": "useful rule of thumb",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "There was just enough heuristic in the plan to make the projector nod like a tiny consultant."
+  },
+  {
+    "id": 361,
+    "word": "threshold",
+    "pos": "noun",
+    "meaning": "point where change happens",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A noun or noun phrase: it names a person, thing, idea, situation, or quality.",
+    "example": "The project finally found threshold when the spreadsheet stopped sulking and the biscuits joined the workflow."
+  },
+  {
+    "id": 362,
+    "word": "inflection point",
+    "pos": "noun phrase",
+    "meaning": "moment of decisive change",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "A fixed expression; the meaning belongs to the whole phrase, not just the individual words.",
+    "example": "The project finally found inflection point when the spreadsheet stopped sulking and the biscuits joined the workflow."
+  },
+  {
+    "id": 363,
+    "word": "emergent",
+    "pos": "adjective",
+    "meaning": "appearing from interactions",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The plan was emergent enough to survive a rainstorm of biscuits and a committee of anxious spoons."
+  },
+  {
+    "id": 364,
+    "word": "scalable",
+    "pos": "adjective",
+    "meaning": "able to grow without breaking",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "The plan was scalable enough to survive a rainstorm of biscuits and a committee of anxious spoons."
+  },
+  {
+    "id": 365,
+    "word": "future-proof",
+    "pos": "adjective",
+    "meaning": "designed to remain useful later",
+    "register": "Modern work / ideas vocabulary",
+    "category": "Modern useful “cool but not stupid” words",
+    "note": "An adjective: place it before a noun, or after be, seem, look, feel, or become.",
+    "example": "Their idea felt future-proof, though the printer demanded a written apology before approving it."
+  }
+]
+  </script>
+
+  <script>
+    const WORDS = JSON.parse(document.getElementById('wordData').textContent);
+    const CATEGORY_COUNT = new Set(WORDS.map(entry => entry.category)).size;
+    const STORE_KEY = 'dailyLexicalBiscuit.favourites.v1';
+
+    const els = {
+      dateText: document.getElementById('dateText'),
+      posTag: document.getElementById('posTag'),
+      registerTag: document.getElementById('registerTag'),
+      modeTag: document.getElementById('modeTag'),
+      wordText: document.getElementById('wordText'),
+      meaningText: document.getElementById('meaningText'),
+      exampleText: document.getElementById('exampleText'),
+      noteText: document.getElementById('noteText'),
+      categoryText: document.getElementById('categoryText'),
+      archiveNumber: document.getElementById('archiveNumber'),
+      categoryNumber: document.getElementById('categoryNumber'),
+      cycleNumber: document.getElementById('cycleNumber'),
+      favCount: document.getElementById('favCount'),
+      wordNumber: document.getElementById('wordNumber'),
+      todayBtn: document.getElementById('todayBtn'),
+      prevBtn: document.getElementById('prevBtn'),
+      nextBtn: document.getElementById('nextBtn'),
+      randomBtn: document.getElementById('randomBtn'),
+      copyBtn: document.getElementById('copyBtn'),
+      favBtn: document.getElementById('favBtn'),
+      searchInput: document.getElementById('searchInput'),
+      archiveList: document.getElementById('archiveList'),
+      toast: document.getElementById('toast')
+    };
+
+    const state = {
+      index: 0,
+      mode: 'Today',
+      favourites: loadFavourites(),
+      dailyIndex: 0,
+      dailySlot: 0
+    };
+
+    function loadFavourites() {
+      try {
+        const raw = localStorage.getItem(STORE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? new Set(parsed) : new Set();
+      } catch {
+        return new Set();
+      }
+    }
+
+    function saveFavourites() {
+      localStorage.setItem(STORE_KEY, JSON.stringify([...state.favourites]));
+    }
+
+    function pad(value) {
+      return String(value).padStart(2, '0');
+    }
+
+    function localDateKey(date) {
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    }
+
+    function dayNumber(date) {
+      return Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000);
+    }
+
+    function dailyPick(date) {
+      const n = dayNumber(date);
+      const slot = ((n % WORDS.length) + WORDS.length) % WORDS.length;
+      const index = (slot * 97 + 41) % WORDS.length;
+      return { index, slot: slot + 1 };
+    }
+
+    function formatDate(date) {
+      return new Intl.DateTimeFormat('en-GB', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }).format(date);
+    }
+
+    function escapeRegExp(text) {
+      return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function highlightWord(sentence, word) {
+      const escaped = escapeRegExp(word);
+      const pattern = new RegExp(`(${escaped})`, 'ig');
+      return sentence.replace(pattern, '<mark>$1</mark>');
+    }
+
+    function setWord(index, mode = 'Archive') {
+      state.index = ((index % WORDS.length) + WORDS.length) % WORDS.length;
+      state.mode = mode;
+      const entry = WORDS[state.index];
+
+      document.title = `${entry.word} — The Daily Lexical Biscuit`;
+      els.posTag.textContent = entry.pos;
+      els.registerTag.textContent = entry.register;
+      els.modeTag.textContent = mode;
+      els.wordText.textContent = entry.word;
+      els.meaningText.textContent = entry.meaning;
+      els.exampleText.innerHTML = highlightWord(entry.example, entry.word);
+      els.noteText.textContent = entry.note;
+      els.categoryText.innerHTML = `<strong>${entry.category}</strong><br>${entry.register}. Archive mix: ${CATEGORY_COUNT} themed shelves. This card uses one chosen sense, because several English words change part of speech depending on context.`;
+      els.wordNumber.textContent = `#${entry.id}`;
+      els.archiveNumber.textContent = WORDS.length;
+      els.categoryNumber.textContent = CATEGORY_COUNT;
+      els.cycleNumber.textContent = state.dailySlot;
+      updateFavouriteButton();
+      renderArchive();
+    }
+
+    function updateFavouriteButton() {
+      const entry = WORDS[state.index];
+      const isFav = state.favourites.has(entry.id);
+      els.favBtn.textContent = isFav ? 'Saved ★' : 'Save favourite';
+      els.favBtn.classList.toggle('starred', isFav);
+      els.favCount.textContent = state.favourites.size;
+    }
+
+    function showToast(text) {
+      els.toast.textContent = text;
+      els.toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => els.toast.classList.remove('show'), 1500);
+    }
+
+    function copyCard() {
+      const entry = WORDS[state.index];
+      const date = localDateKey(new Date());
+      const text = [
+        `The Daily Lexical Biscuit — ${date}`,
+        `${entry.word} (${entry.pos})`,
+        `Meaning: ${entry.meaning}`,
+        `Register: ${entry.register}`,
+        `Example: ${entry.example}`,
+        `Usage note: ${entry.note}`
+      ].join('\n');
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+          .then(() => showToast('Copied the word card.'))
+          .catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Copied the word card.');
+      } catch {
+        showToast('Copy not available here.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function toggleFavourite() {
+      const entry = WORDS[state.index];
+      if (state.favourites.has(entry.id)) {
+        state.favourites.delete(entry.id);
+        showToast('Removed from favourites.');
+      } else {
+        state.favourites.add(entry.id);
+        showToast('Saved to favourites.');
+      }
+      saveFavourites();
+      updateFavouriteButton();
+      renderArchive();
+    }
+
+    function normalise(text) {
+      return String(text).toLowerCase().replace(/[’]/g, "'");
+    }
+
+    function renderArchive() {
+      const query = normalise(els.searchInput.value.trim());
+      const matches = WORDS.filter(entry => {
+        if (!query) return true;
+        const haystack = normalise(`${entry.word} ${entry.pos} ${entry.meaning} ${entry.register} ${entry.category} ${entry.note}`);
+        return haystack.includes(query);
+      });
+
+      const html = matches.slice(0, 365).map(entry => {
+        const fav = state.favourites.has(entry.id) ? ' ★' : '';
+        const selected = WORDS[state.index].id === entry.id ? ' aria-current="true"' : '';
+        return `
+          <button class="item" data-id="${entry.id}" role="option"${selected}>
+            <span class="num">#${entry.id}</span>
+            <span>
+              <strong>${entry.word}${fav}</strong>
+              <span>${entry.pos} · ${entry.meaning}</span>
+            </span>
+          </button>
+        `;
+      }).join('');
+
+      els.archiveList.innerHTML = html || '<div class="item"><span class="num">—</span><span><strong>No matches</strong><span>Try a broader search.</span></span></div>';
+    }
+
+    function jumpBy(delta) {
+      setWord(state.index + delta, 'Archive stroll');
+    }
+
+    function randomWord() {
+      let next = Math.floor(Math.random() * WORDS.length);
+      if (WORDS.length > 1 && next === state.index) next = (next + 1) % WORDS.length;
+      setWord(next, 'Random biscuit');
+    }
+
+    function goToday() {
+      setWord(state.dailyIndex, 'Today');
+    }
+
+    function init() {
+      const now = new Date();
+      const pick = dailyPick(now);
+      state.dailyIndex = pick.index;
+      state.dailySlot = pick.slot;
+      els.dateText.textContent = formatDate(now);
+
+      els.todayBtn.addEventListener('click', goToday);
+      els.prevBtn.addEventListener('click', () => jumpBy(-1));
+      els.nextBtn.addEventListener('click', () => jumpBy(1));
+      els.randomBtn.addEventListener('click', randomWord);
+      els.copyBtn.addEventListener('click', copyCard);
+      els.favBtn.addEventListener('click', toggleFavourite);
+      els.searchInput.addEventListener('input', renderArchive);
+
+      els.archiveList.addEventListener('click', event => {
+        const item = event.target.closest('[data-id]');
+        if (!item) return;
+        const id = Number(item.dataset.id);
+        const index = WORDS.findIndex(entry => entry.id === id);
+        if (index >= 0) {
+          setWord(index, 'Archive');
+          showToast(`Opened #${id}.`);
+        }
+      });
+
+      window.addEventListener('keydown', event => {
+        const tag = document.activeElement?.tagName?.toLowerCase();
+        if (tag === 'input' || tag === 'textarea') return;
+        if (event.key === 'ArrowLeft') jumpBy(-1);
+        if (event.key === 'ArrowRight') jumpBy(1);
+        if (event.key.toLowerCase() === 'r') randomWord();
+        if (event.key.toLowerCase() === 't') goToday();
+        if (event.key.toLowerCase() === 'f') toggleFavourite();
+      });
+
+      goToday();
+    }
+
+    init();
+  </script>
+</body>
+</html>
