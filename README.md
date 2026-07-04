@@ -1,2 +1,2 @@
-# Edu-Wrod of Day (WOD)
+# Edu-Word of Day (WOD)
 Word of the day 
