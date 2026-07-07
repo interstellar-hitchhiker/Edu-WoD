@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Daily Lexical Biscuit icon">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffc76a"/>
+      <stop offset="0.52" stop-color="#ff7ac8"/>
+      <stop offset="1" stop-color="#8af7ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#140f1f"/>
+  <circle cx="256" cy="256" r="178" fill="url(#g)" opacity="0.92"/>
+  <circle cx="256" cy="256" r="132" fill="#24123a" opacity="0.96"/>
+  <text x="256" y="288" text-anchor="middle" font-family="Georgia, serif" font-size="150" font-weight="700" fill="#fff8ef">B</text>
+  <circle cx="169" cy="161" r="16" fill="#fff8ef" opacity="0.72"/>
+  <circle cx="350" cy="170" r="11" fill="#fff8ef" opacity="0.72"/>
+  <circle cx="168" cy="348" r="10" fill="#fff8ef" opacity="0.72"/>
+  <circle cx="355" cy="348" r="15" fill="#fff8ef" opacity="0.72"/>
+</svg>

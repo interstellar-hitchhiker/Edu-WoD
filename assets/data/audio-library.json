@@ -1,0 +1,29 @@
+[
+  {
+    "id": "song-thrush",
+    "label": "Song thrush birdsong",
+    "src": "assets/audio/bbc/bbc_song-thrus_nhu0508018.mp3",
+    "filename": "bbc_song-thrus_nhu0508018.mp3",
+    "credit": "BBC Sound Effects",
+    "source": "https://sound-effects.bbcrewind.co.uk/search?q=NHU05080188",
+    "note": "User-supplied BBC Sound Effects download filename. Add this MP3 to assets/audio/bbc/."
+  },
+  {
+    "id": "close-fire",
+    "label": "Close fire / fireplace",
+    "src": "assets/audio/bbc/bbc_fire---clo_nhu0500210.mp3",
+    "filename": "bbc_fire---clo_nhu0500210.mp3",
+    "credit": "BBC Sound Effects",
+    "source": "https://sound-effects.bbcrewind.co.uk/search?q=NHU05002102",
+    "note": "User-supplied BBC Sound Effects download filename. Add this MP3 to assets/audio/bbc/."
+  },
+  {
+    "id": "heavy-rain",
+    "label": "Heavy rain",
+    "src": "assets/audio/bbc/bbc_rain---hea_nhu0503213.mp3",
+    "filename": "bbc_rain---hea_nhu0503213.mp3",
+    "credit": "BBC Sound Effects",
+    "source": "https://sound-effects.bbcrewind.co.uk/search?q=NHU05032133",
+    "note": "User-supplied BBC Sound Effects download filename. Add this MP3 to assets/audio/bbc/."
+  }
+]

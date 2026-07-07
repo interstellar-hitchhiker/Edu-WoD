@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Daily Lexical Biscuit</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <meta name="theme-color" content="#24123a" />
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <section class="brand" aria-label="App title">
+        <div class="kicker"><span class="dot"></span> word of the day</div>
+        <h1>The Daily Lexical Biscuit</h1>
+        <p class="intro">
+          One curious English word each day, with part of speech, meaning, register, a grounded example, favourites, archive search, and optional BBC ambience you can add locally.
+        </p>
+      </section>
+
+      <section class="date-pill" aria-label="Current date">
+        <div class="small">today is</div>
+        <div class="date" id="dateText">Loading date…</div>
+      </section>
+    </header>
+
+    <section class="grid">
+      <article class="card" aria-live="polite">
+        <div class="topline">
+          <span class="tag pos" id="posTag">part of speech</span>
+          <span class="tag register" id="registerTag">register</span>
+          <span class="tag" id="modeTag">today</span>
+        </div>
+
+        <h2 class="word" id="wordText">word</h2>
+
+        <p class="meaning">
+          <span>Meaning:</span> <strong id="meaningText">meaning</strong>
+        </p>
+
+        <div class="example-wrap">
+          <p class="example-label">grounded example</p>
+          <p class="example" id="exampleText">Example sentence.</p>
+        </div>
+
+        <p class="note" id="noteText">Usage note.</p>
+
+        <div class="actions">
+          <button class="primary" id="todayBtn">Today’s word</button>
+          <button id="prevBtn">Previous</button>
+          <button id="nextBtn">Next</button>
+          <button class="secondary" id="randomBtn">Random biscuit</button>
+          <button id="copyBtn">Copy card</button>
+          <button id="favBtn">Save favourite</button>
+        </div>
+      </article>
+
+      <aside aria-label="Word details and archive">
+        <section class="side-card">
+          <p class="side-title">daily mechanics</p>
+          <div class="mini-grid">
+            <div class="stat">
+              <strong id="archiveNumber">365</strong>
+              <span>words and phrases in the archive</span>
+            </div>
+            <div class="stat">
+              <strong id="categoryNumber">—</strong>
+              <span>themed shelves in the archive</span>
+            </div>
+            <div class="stat">
+              <strong id="cycleNumber">—</strong>
+              <span>daily slot in the yearly cycle</span>
+            </div>
+            <div class="stat">
+              <strong id="favCount">0</strong>
+              <span>saved favourites on this browser</span>
+            </div>
+            <div class="stat">
+              <strong id="wordNumber">—</strong>
+              <span>archive number for this word</span>
+            </div>
+          </div>
+          <div class="category" id="categoryText">Category information appears here.</div>
+        </section>
+
+        <section class="side-card audio-card" aria-label="Optional ambient sound">
+          <p class="side-title">ambience</p>
+          <div class="audio-now" id="audioNow">Choose a local BBC ambience file.</div>
+          <div class="field audio-field">
+            <label for="ambienceSelect">Soundscape</label>
+            <select id="ambienceSelect">
+              <option value="">Off</option>
+            </select>
+          </div>
+          <div class="actions audio-actions">
+            <button class="secondary" id="audioPlayBtn" type="button">Play ambience</button>
+            <button id="audioPauseBtn" type="button">Pause</button>
+          </div>
+          <div class="field audio-field">
+            <label for="ambienceVolume">Volume <span id="ambienceVolumeText">35</span>%</label>
+            <input id="ambienceVolume" type="range" min="0" max="100" value="35" />
+          </div>
+          <p class="audio-credit" id="audioCredit">Audio files are not included. Add the three MP3s to <code>assets/audio/bbc/</code>.</p>
+          <p class="audio-source"><a id="audioSourceLink" href="docs/audio-guide.md">Audio guide</a></p>
+          <audio id="ambienceAudio" preload="metadata" loop></audio>
+        </section>
+
+        <details class="archive">
+          <summary>Browse the whole archive</summary>
+          <div class="archive-inner">
+            <input class="search" id="searchInput" type="search" autocomplete="off" placeholder="Search word, meaning, category, or part of speech…" />
+            <div class="list" id="archiveList" role="listbox" aria-label="Word archive"></div>
+          </div>
+        </details>
+      </aside>
+    </section>
+
+    <p class="footer-note">
+      The daily word is chosen from the bundled 365-word archive using your browser’s local date. No login or database is required; ambience uses local MP3 files you add to the repo.
+    </p>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Copied.</div>
+  <script type="module" src="assets/js/app.js"></script>
+  <script type="module" src="assets/js/pwa-register.js"></script>
+</body>
+</html>
